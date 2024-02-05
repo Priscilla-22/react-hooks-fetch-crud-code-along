@@ -1,7 +1,6 @@
 import React from 'react';
 
-function Item({ item,onUpdateItem }) {
-
+function Item({ item, onUpdateItem , onDeleteItem}) {
   function handleAddToCartClick() {
     fetch(`http://localhost:4000/items/${item.id}`, {
       method: 'PATCH',
@@ -16,6 +15,15 @@ function Item({ item,onUpdateItem }) {
       .then((updateItem) => onUpdateItem(updateItem));
   }
 
+  function handleDeleteClick() {
+    fetch(`http://localhost:4000/items/${item.id}`, {
+      method: 'DELETE',
+    })
+      .then((r) => r.json())
+      .then(() => onDeleteItem(item))
+  }
+  
+
   return (
     <li className={item.isInCart ? 'in-cart' : ''}>
       <span>{item.name}</span>
@@ -26,7 +34,9 @@ function Item({ item,onUpdateItem }) {
       >
         {item.isInCart ? 'Remove From' : 'Add to'} Cart
       </button>
-      <button className='remove'>Delete</button>
+      <button className='remove' onClick={handleDeleteClick}>
+        Delete
+      </button>
     </li>
   );
 }
