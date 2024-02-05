@@ -7,17 +7,26 @@ function ShoppingList() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [items, setItems] = useState([]);
 
-
   useEffect(() => {
     fetch('http://localhost:4000/items')
       .then((r) => r.json())
       .then((items) => setItems(items));
   }, []);
 
- 
-function handleAddItem(newItem) {
-  setItems([...items, newItem]);
-}
+  function handleUpdateItem(updatedItem) {
+    const updatedItems = items.map((item) => {
+      if (item.id === updatedItem.id) {
+        return updatedItem;
+      } else {
+        return item;
+      }
+    });
+    setItems(updatedItems);
+  }
+
+  function handleAddItem(newItem) {
+    setItems([...items, newItem]);
+  }
 
   function handleCategoryChange(category) {
     setSelectedCategory(category);
@@ -38,7 +47,7 @@ function handleAddItem(newItem) {
       />
       <ul className='Items'>
         {itemsToDisplay.map((item) => (
-          <Item key={item.id} item={item} />
+          <Item key={item.id} item={item} onUpdateItem={handleUpdateItem} />
         ))}
       </ul>
     </div>
